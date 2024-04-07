@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{%block body %}
+<link href="{% static 'style2.css' %}" rel="stylesheet">
+<div class="container">
+<h1>Search Results</h1>
+
+{% if query %}
+    <p>Showing results for: "{{ query }}"</p>
+{% endif %}
+
+{% if results %}
+    <ul>
+        {% for movie in results %}
+            <li> <a href="{%url 'finaltaskapp:details' movie.id %}"> {{ movie.title }} </a></li>
+
+            <!-- Display other relevant information about the movie -->
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+
+    </div>
+{% endblock %}

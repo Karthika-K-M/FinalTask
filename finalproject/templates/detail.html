@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{%block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <img height="500" src="{{movie.img.url}}" width="450">
+        </div>
+        <div class="col-md-6">
+            <font color="cyan">
+                <h2>{{movie.title}}</h2>
+                <h6>{{movie.desc}}</h6>
+                <h6>{{movie.actors}}</h6>
+                <h6>{{movie.category}}</h6>
+                <h6>{{movie.releasedate}}</h6>
+                <a href="{{ movie.trailer }}">{{ movie.trailer }}</a><br>
+            </font>
+            <!-- {% if user.is_authenticated %} -->
+            {% if movie.user == user %}
+            <a class="btn btn-warning" href="{% url 'finaltaskapp:edit_movie' movie.id %}">Edit the Form</a>
+            <a class="btn btn-danger" href="{% url 'finaltaskapp:delete' movie.id %}">Delete the entry</a>
+            {% else %}
+            <a class="btn btn-warning" href="#">Edit the Form</a>
+            <a class="btn btn-danger" href="#">Delete the entry</a>
+            <!-- {% endif %}-->
+            {% endif %}
+        </div>
+        {%for i in movie_list %}
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

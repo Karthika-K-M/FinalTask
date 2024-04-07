@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{%block body %}
+<link href="{% static 'style2.css' %}" rel="stylesheet">
+<div class="container">
+<h2>User Login</h2>
+<form action="login" method="post">
+    {% csrf_token %}
+     <input type="text" name="username" placeholder="Enter your Username"><br>
+    <input type="text" name="password" placeholder="Enter your Password"><br>
+
+     <input type="Submit">
+</form>
+{% for msg in messages %}
+{{msg}}
+{% endfor %}
+    </div>
+{% endblock %}

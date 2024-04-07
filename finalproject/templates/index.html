@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block body %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<div class="container">
+    <div class="row mb-3"> <h4 style="color: white;">Select movie category to filter</h4>
+        <div class="col-md-6">
+            <select id="category-select" class="form-select">
+                <option value="">All Categories</option>
+                <option value="Action">Action</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Romance">Romance</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" id="movie-list">
+        {%for i in movie_list %}
+        <div class="col-md-4 movie-card" data-category="{{ i.category }}">
+            <div class="card" style="width: 18rem;">
+                <img alt="Card image cap" class="card-img-top" height="350px" src="{{i.img.url}}" width="300px">
+                <div class="card-body">
+                    <h5 class="card-title">{{i.title}}</h5>
+                    <p class="card-text">{{i.desc}}</p>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-primary" href="{%url 'finaltaskapp:details' i.id %}">Click here for more details</a>
+                    <div class="rating-section">
+                        <input type="radio" id="star1_{{ i.id }}" name="rating_{{ i.id }}" value="1">
+                        <label for="star1_{{ i.id }}">1<i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2_{{ i.id }}" name="rating_{{ i.id }}" value="2">
+                        <label for="star2_{{ i.id }}">2<i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3_{{ i.id }}" name="rating_{{ i.id }}" value="3">
+                        <label for="star3_{{ i.id }}">3<i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4_{{ i.id }}" name="rating_{{ i.id }}" value="4">
+                        <label for="star4_{{ i.id }}">4<i class="fas fa-star"></i></label>
+                        <input type="radio" id="star5_{{ i.id }}" name="rating_{{ i.id }}" value="5">
+                        <label for="star5_{{ i.id }}">5<i class="fas fa-star"></i></label>
+                        <!-- Add more inputs and labels for other rating options -->
+
+                    </div>
+                    <form method="post" action="{% url 'finaltaskapp:add_review' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="movie_id" value={{i.id}}>
+                        <input type="hidden" name="rating" id="rating_{{ i.id }}">
+                        <div class="form-group">
+                            <label for="review_content">Your Review:</label>
+                            <textarea class="form-control" id="review_content" name="review_content" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                    {% for review in i.reviews.all %}
+                    <hr>
+                    <p><strong>{{ review.user.username }}</strong>: {{ review.content }}</p>
+                    {% endfor %}
+                    {% else %}
+                    <a class="btn btn-primary" href="#">Click here for more details</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    // JavaScript to handle category filtering
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('category-select').addEventListener('change', function () {
+            var selectedCategory = this.value;
+            var movieCards = document.querySelectorAll('.movie-card');
+
+            movieCards.forEach(function (card) {
+                var category = card.getAttribute('data-category');
+
+                if (selectedCategory === '' || selectedCategory === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // JavaScript to capture selected rating value
+        document.querySelectorAll('.rating-section input[type="radio"]').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                var ratingValue = this.value;
+                var movieId = this.id.split('_')[1];
+                document.getElementById('rating_' + movieId).value = ratingValue;
+            });
+        });
+    });
+</script>
+{% endblock %}

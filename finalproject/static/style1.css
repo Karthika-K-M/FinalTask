@@ -1,0 +1,16 @@
+body{
+      background-image: url("{% static 'assets/images/bckImg.jpeg' %}");
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+            background-size: 100% 100%;
+            }
+.navbar {
+            background-color: #333; /* Set the background color of the navbar */
+            color: white; /* Set the text color */
+            padding: 10px; /* Add padding to the navbar */
+        }
+.container {
+            background-color: rgba(0,0,0,0.75);
+        }
+
